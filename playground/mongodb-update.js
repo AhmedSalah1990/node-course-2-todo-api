@@ -20,15 +20,22 @@ MongoClient.connect(
     //     console.log(result);
     //   });
 
-    db.collection("Users")
-      .findOneAndUpdate(
-        { _id: new ObjectId("5bed51139f17aa126f841645") },
-        {
-          $set: { name: "Ahmed" },
-          $inc: { age: 1 }
-        },
-        { returnOriginal: false }
-      )
+    // db.collection("Users")
+    //   .findOneAndUpdate(
+    //     { _id: new ObjectId("5bed51139f17aa126f841645") },
+    //     {
+    //       $set: { name: "Ahmed" },
+    //       $inc: { age: 1 }
+    //     },
+    //     { returnOriginal: false }
+    //   )
+    //   .then(result => {
+    //     console.log(result);
+    //   });
+
+    db.collection("Matches")
+      .find()
+      .toArray()
       .then(result => {
         console.log(result);
       });
