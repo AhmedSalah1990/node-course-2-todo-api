@@ -66,12 +66,12 @@ app.delete("/todos/:id", (req, res) => {
     return res.status(404).send();
   }
 
-  Todo.findByIdAndRemove(id)
+  Todo.findByIdAndDelete(id)
     .then(todo => {
       if (!todo) {
         return res.status(404).send();
       }
-      res.send(todo);
+      res.send({ todo });
     })
     .catch(error => {
       res.status(400).send();
