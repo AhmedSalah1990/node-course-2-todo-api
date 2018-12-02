@@ -127,6 +127,17 @@ app.post("/users", (req, res) => {
       res.header("x-auth", token).send(newUser);
     })
     .catch(error => {
+      if (error.name && error.name === "ValidationError") {
+        const errorMsg = [];
+        for (let key in error.errors) {
+          if (error.errors.hasOwnProperty(key)) {
+            errorMsg.push({
+              [key]: error.errors[key].message
+            });
+          }
+        }
+        return res.status(400).send(errorMsg);
+      }
       res.status(400).send(error);
     });
 });
