@@ -128,12 +128,10 @@ app.post("/users", (req, res) => {
     })
     .catch(error => {
       if (error.name && error.name === "ValidationError") {
-        const errorMsg = [];
+        const errorMsg = {};
         for (let key in error.errors) {
           if (error.errors.hasOwnProperty(key)) {
-            errorMsg.push({
-              [key]: error.errors[key].message
-            });
+            errorMsg[key] = error.errors[key].message;
           }
         }
         return res.status(400).send(errorMsg);
@@ -144,6 +142,21 @@ app.post("/users", (req, res) => {
 
 app.get("/users/me", authonticate, (req, res) => {
   res.send(req.user);
+});
+
+// POST /users/login (email, password)
+app.post("/users/login", (req, res) => {
+  const body = _.pick(req.body, ["email", "password"]);
+
+  User.findByCredentials(body.email, body.password)
+    .then(user => {
+      user.generateAuthToken().then(token => {
+        res.header("x-auth", token).send(user);
+      });
+    })
+    .catch(error => {
+      res.status(400).send(error);
+    });
 });
 
 app.listen(port, () => {
